@@ -102,23 +102,28 @@ const VoiceInputModal = ({ onApply, onClose }) => {
           {phase === 'listening' && (
             <div className="text-center py-4">
               <div className="relative w-24 h-24 mx-auto mb-4">
-                <span className="absolute inset-0 rounded-full animate-ping opacity-30" style={{ backgroundColor: '#121358' }} />
-                <span className="absolute inset-2 rounded-full animate-ping opacity-20 animation-delay-150" style={{ backgroundColor: '#121358' }} />
-                <button
-                  onClick={handleStop}
+                <span className="absolute inset-0 rounded-full animate-ping opacity-30 pointer-events-none" style={{ backgroundColor: '#121358' }} />
+                <span className="absolute inset-2 rounded-full animate-ping opacity-20 pointer-events-none" style={{ backgroundColor: '#121358' }} />
+                <div
                   className="relative w-24 h-24 rounded-full flex items-center justify-center shadow-lg"
                   style={{ backgroundColor: '#121358' }}
                 >
                   <Mic size={32} className="text-white" />
-                </button>
+                </div>
               </div>
-              <p className="text-sm font-semibold text-gray-700 mb-2">Listening...</p>
+              <p className="text-sm font-semibold text-gray-700 mb-3">Listening...</p>
               {transcript && (
-                <div className="bg-gray-50 rounded-xl px-4 py-3 text-sm text-gray-600 italic text-left border border-gray-200 mt-3 max-h-24 overflow-y-auto">
+                <div className="bg-gray-50 rounded-xl px-4 py-3 text-sm text-gray-600 italic text-left border border-gray-200 mb-4 max-h-24 overflow-y-auto">
                   "{transcript}"
                 </div>
               )}
-              <p className="text-xs text-gray-400 mt-3">Tap mic to stop</p>
+              <button
+                onClick={handleStop}
+                className="flex items-center gap-2 mx-auto px-6 py-2.5 rounded-lg text-sm font-semibold text-white transition-all hover:opacity-90 active:scale-95"
+                style={{ backgroundColor: '#c0392b' }}
+              >
+                <MicOff size={16} /> Stop Recording
+              </button>
             </div>
           )}
 
