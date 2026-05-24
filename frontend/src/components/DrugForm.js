@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { X, Save, Plus } from 'lucide-react';
+import { X, Save, Plus, Mic } from 'lucide-react';
+import VoiceInputModal from './VoiceInputModal';
 
 const CATEGORIES = [
   'Antibiotic',
@@ -35,6 +36,7 @@ const emptyForm = {
 const DrugForm = ({ drug, onSubmit, onClose, loading }) => {
   const [form, setForm] = useState(emptyForm);
   const [errors, setErrors] = useState({});
+  const [showVoice, setShowVoice] = useState(false);
 
   useEffect(() => {
     if (drug) {
@@ -57,6 +59,15 @@ const DrugForm = ({ drug, onSubmit, onClose, loading }) => {
     }
     setErrors({});
   }, [drug]);
+
+  const handleVoiceApply = (parsed) => {
+    setForm((prev) => ({
+      ...prev,
+      ...Object.fromEntries(
+        Object.entries(parsed).map(([k, v]) => [k, v !== undefined ? String(v) : prev[k]])
+      ),
+    }));
+  };
 
   const validate = () => {
     const errs = {};
@@ -96,13 +107,31 @@ const DrugForm = ({ drug, onSubmit, onClose, loading }) => {
             {drug ? <Save size={20} /> : <Plus size={20} />}
             {drug ? 'Edit Drug' : 'Add New Drug'}
           </h2>
-          <button
-            onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 transition-colors p-1 rounded-lg hover:bg-gray-100"
-          >
-            <X size={20} />
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setShowVoice(true)}
+              title="Fill with voice"
+              className="flex items-center gap-1 text-xs font-semibold px-3 py-1.5 rounded-lg border transition-colors"
+              style={{ color: '#121358', borderColor: '#121358' }}
+            >
+              <Mic size={14} /> Voice
+            </button>
+            <button
+              onClick={onClose}
+              className="text-gray-400 hover:text-gray-600 transition-colors p-1 rounded-lg hover:bg-gray-100"
+            >
+              <X size={20} />
+            </button>
+          </div>
         </div>
+
+      {showVoice && (
+        <VoiceInputModal
+          onApply={handleVoiceApply}
+          onClose={() => setShowVoice(false)}
+        />
+      )}
 
         <form onSubmit={handleSubmit} className="p-6 space-y-5">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
